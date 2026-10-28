@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Food Delivery Management System</title>
+<style>
+:root{--navy:#102b4e;--orange:#ff5b24;--green:#087443;--muted:#64748b;--line:#dce5ef}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--navy);background:linear-gradient(135deg,#f7fbff,#edf5fc)}
+header{background:#fff;border-bottom:1px solid #e5edf5;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px;font-weight:800;font-size:25px}.logo{font-size:42px}.brand span{color:var(--orange)}.brand small{display:block;font-size:17px;margin-top:3px}
+nav{display:flex;gap:26px;color:#334155;font-weight:600}
+main{max-width:1450px;margin:auto;padding:18px 3.5% 10px}
+.hero{border-radius:16px;padding:28px 32px;background:linear-gradient(105deg,#ffecd4,#fff6ed);display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:155px;margin-bottom:20px;overflow:hidden}
+.hero h1{font-size:clamp(25px,3vw,39px);margin:0 0 12px}.hero h1 span{color:var(--orange)}.hero p{color:#425875;line-height:1.7;margin:0;font-size:17px}.hero-art{font-size:76px;white-space:nowrap}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:#fff;border:1px solid #e4ebf3;border-radius:16px;padding:24px;box-shadow:0 5px 18px #193b5b0a}
+h2{font-size:23px;margin:0 0 22px;display:flex;align-items:center;gap:12px}
+.circle{width:44px;height:44px;border-radius:50%;display:inline-grid;place-items:center;background:#ffebe4;color:var(--orange);font-size:23px;flex-shrink:0}
+label{display:block;font-weight:700;margin:15px 0 8px}
+input{width:100%;padding:13px 14px;border:1px solid #d7e1ed;border-radius:9px;font-size:15px;color:var(--navy);outline:none}
+input:focus{border-color:#ff875f;box-shadow:0 0 0 3px #ff5b2415}
+.traffic{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.traffic button{padding:12px 5px;border:1px solid #dce5ef;border-radius:9px;background:#fff;cursor:pointer;color:#334155}
+.traffic button b{display:block;margin:0 auto 6px;width:22px;height:22px;border-radius:50%;background:#64748b;color:#fff;line-height:22px}
+.traffic button[data-level="1"]{background:#effbf4;border-color:#a7ebc3}.traffic button[data-level="2"]{background:#fff9e9;border-color:#ffe2a1}.traffic button[data-level="3"]{background:#fff3eb;border-color:#ffd0b7}.traffic button[data-level="4"]{background:#fff0f0;border-color:#ffcaca}
+.traffic button.selected{outline:2px solid var(--orange);font-weight:700}
+.primary{width:100%;border:0;border-radius:9px;padding:14px;background:linear-gradient(90deg,#ff7130,#ff4d20);color:white;font-size:16px;font-weight:800;cursor:pointer;margin-top:18px}
+.result{border:1px solid #9ce5b9;background:#f0fcf4;border-radius:12px;text-align:center;padding:22px 12px;color:var(--green);margin-bottom:20px}
+.result .time{font-size:clamp(30px,3.2vw,44px);font-weight:800;margin:4px 0 8px}.result p{margin:0}
+.summary-title{font-weight:800;font-size:17px;margin:15px 0 8px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:11px 4px;border-bottom:1px solid #e3eaf2;font-size:14px}.row span:first-child{color:#334e70}.row strong{font-weight:600;text-align:right}
+.success{margin-top:16px;border:1px solid #9ce5b9;background:#f0fcf4;color:var(--green);border-radius:10px;padding:15px;font-weight:700}.success small{display:block;font-weight:400;margin:6px 0 0}
+footer{text-align:center;background:#14263d;color:#fff;padding:18px 10px;margin-top:10px;font-size:13px}
+@media(max-width:800px){.columns{grid-template-columns:1fr}.hero-art{font-size:50px}.card{padding:18px}header{padding:14px 4%}nav{gap:14px}.traffic{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.hero{padding:22px 18px}.hero-art{display:none}.brand{font-size:21px}.brand small{font-size:15px}nav{font-size:13px}.row{font-size:13px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">🛵</div><div><span>AI</span> Food Delivery<small>Management System</small></div></div>
+  <nav><div>⌂ Home</div><div>ⓘ About</div><div>☎ Contact</div></nav>
+</header>
+<main>
+  <section class="hero">
+    <div><h1>Smarter Delivery, <span>Happier You!</span></h1><p>Get estimated delivery time using our prediction system.<br>Enter your details and plan your order better!</p></div>
+    <div class="hero-art">🛵　📍　🍔</div>
+  </section>
+  <div class="columns">
+    <section class="card">
+      <h2><span class="circle">🍴</span>Enter Order Details</h2>
+      <form id="orderForm">
+        <label for="customer">Customer Name</label><input id="customer" placeholder="Enter your name" required>
+        <label for="food">Food Item</label><input id="food" placeholder="Enter food item (e.g., Pizza, Burger)" required>
+        <label for="distance">Distance from Restaurant (in KM)</label><input id="distance" type="number" min="0" step="0.1" placeholder="Enter distance in KM (e.g., 5.5)" required>
+        <label>🚦 Traffic Level</label>
+        <div class="traffic">
+          <button type="button" data-level="1" class="selected"><b>1</b>Low Traffic</button>
+          <button type="button" data-level="2"><b>2</b>Medium Traffic</button>
+          <button type="button" data-level="3"><b>3</b>High Traffic</button>
+          <button type="button" data-level="4"><b>4</b>Heavy Traffic Jam</button>
+        </div>
+        <label for="prep">Food Preparation Time (in Minutes)</label><input id="prep" type="number" min="0" step="1" placeholder="Enter preparation time (e.g., 15)" required>
+        <button class="primary" type="submit">➤ Calculate Delivery Time</button>
+      </form>
+    </section>
+    <section class="card">
+      <h2 style="color:var(--green)"><span class="circle" style="background:#e1f8e9;color:var(--green)">◷</span>Estimated Delivery Time</h2>
+      <div class="result"><div style="font-size:27px">🛵</div><div class="time" id="time">— minutes</div><p id="resultText">Your estimated delivery time will appear here.</p></div>
+      <div class="summary-title">▤　Order Summary</div>
+      <div class="row"><span>👤 Customer Name</span><strong id="sumCustomer">—</strong></div>
+      <div class="row"><span>🍔 Food Item</span><strong id="sumFood">—</strong></div>
+      <div class="row"><span>📍 Distance</span><strong id="sumDistance">—</strong></div>
+      <div class="row"><span>🚦 Traffic Level</span><strong id="sumTraffic">—</strong></div>
+      <div class="row"><span>◷ Preparation Time</span><strong id="sumPrep">—</strong></div>
+      <div class="row" style="background:#effbf4;color:var(--green);margin-top:10px;border-radius:8px;padding:13px"><span>◷ Estimated Delivery Time</span><strong id="sumTime">—</strong></div>
+      <div class="success" id="success">✓ Ready to estimate!<small>Fill in the order details and select “Calculate Delivery Time”.</small></div>
+    </section>
+  </div>
+</main>
+<footer>© 2026 AI Food Delivery Management System　|　Fast • Smart • Reliable</footer>
+<script>
+let trafficLevel = 1;
+const trafficNames = {1:"Low Traffic",2:"Medium Traffic",3:"High Traffic",4:"Heavy Traffic Jam"};
+document.querySelectorAll(".traffic button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    trafficLevel = Number(btn.dataset.level);
+    document.querySelectorAll(".traffic button").forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
+  });
+});
+document.getElementById("orderForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const customer = document.getElementById("customer").value.trim();
+  const food = document.getElementById("food").value.trim();
+  const distance = Number(document.getElementById("distance").value);
+  const prep = Number(document.getElementById("prep").value);
+  if (!customer || !food || distance < 0 || prep < 0 || !Number.isFinite(distance) || !Number.isFinite(prep)) {
+    alert("Please enter valid order details."); return;
+  }
+  // Same estimate formula as the supplied Python program:
+  const estimated = Math.round(distance * 3 + trafficLevel * 5 + prep);
+  document.getElementById("time").textContent = estimated + " minutes";
+  document.getElementById("resultText").textContent = "Your food will be delivered in approximately";
+  document.getElementById("sumCustomer").textContent = customer;
+  document.getElementById("sumFood").textContent = food;
+  document.getElementById("sumDistance").textContent = distance + " KM";
+  document.getElementById("sumTraffic").textContent = "Level " + trafficLevel + " (" + trafficNames[trafficLevel] + ")";
+  document.getElementById("sumPrep").textContent = prep + " mins";
+  document.getElementById("sumTime").textContent = estimated + " minutes";
+  document.getElementById("success").innerHTML = "✓ Order estimate calculated successfully!<small>This is an estimated time, not a live tracking prediction.</small>";
+});
+</script>
+</body>
+</html>
